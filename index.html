@@ -205,6 +205,8 @@
     </script>
     
     <script>
+    loadMenus();
+    
     // Banner text add parallax efect and fade
 	function EasyPeasyParallax() {
 	    scrollPos = $(this).scrollTop();
@@ -220,8 +222,6 @@
 	    $(window).scroll(function () {
 	        EasyPeasyParallax();
 	    });
-
-	    loadMenus();
 	});
 
 	function loadMenus(){
@@ -240,9 +240,6 @@
 			if(restaurants.length > 0){
 				for(; i < max; i++){
 					restaurant = restaurants[i];
-
-					console.log('restaurant: ', JSON.stringify(restaurant, null, 4));
-
 					menu = restaurants[i].menus[0];
 					img = menu.images[0];
 
