@@ -1,0 +1,24 @@
+{
+  "name": "gobbl.github.io",
+  "version": "1.0.0",
+  "homepage": "https://github.com/gobbl/gobbl.github.io",
+  "authors": [
+    "Kelvin Tay <kelvintaywl@gmail.com>"
+  ],
+  "description": "main website for Gobbl.me",
+  "keywords": [
+    "bento",
+    "takeout",
+    "lunch",
+    "experience"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ]
+}
