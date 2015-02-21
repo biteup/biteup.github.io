@@ -1,0 +1,28 @@
+{
+  "name": "gobbl.github.io",
+  "version": "1.0.0",
+  "description": "main website for Gobbl.me",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gobbl/gobbl.github.io.git"
+  },
+  "keywords": [
+    "bento",
+    "takeout",
+    "lunch",
+    "experience"
+  ],
+  "author": "Kelvin Tay",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gobbl/gobbl.github.io/issues"
+  },
+  "homepage": "https://github.com/gobbl/gobbl.github.io",
+  "dependencies": {
+    "mixpanel-data-export": "^1.6.2"
+  }
+}

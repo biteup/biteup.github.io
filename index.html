@@ -139,8 +139,8 @@
 		      <div class="carousel-inner">
 		        <div class="item active">
 		        	<div class="centered mtb">
-				        <h4>Number of Bentos viewed:</h4>
-				        <h1>25</h1>
+				        <h4 id="bento-view-header" data-mixpanel-event="Simulate Bento Viewed">Number of Bentos viewed:</h4>
+				        <h1 id="bento-view-info">25</h1>
 					</div>
 				</div><!-- /item -->
 			</div><!--/carousel-inner -->
@@ -178,7 +178,7 @@
     <script src="assets/js/jquery.superslides.js"></script>
     <script src="assets/js/jquery.cubeportfolio.js"></script>
     <script src="assets/js/jquery.hammer.min.js"></script>
-
+    <script src="node_modules/mixpanel-data-export/dist/mixpanel_data_export.js"></script>
     <script>
     loadMenus();
 
@@ -216,7 +216,46 @@
 	    $(window).scroll(function () {
 	        EasyPeasyParallax();
 	    });
+
+	    // get mixpanel event info
+	    var mixpanelEvent = $('#bento-view-header').data('mixpanel-event');
+	    fetchMixpanelEvents([mixpanelEvent], function(data){
+	    	$('#bento-view-info').text(data[mixpanelEvent]);
+	    });
 	});
+
+	function fetchMixpanelEvents(events, callback){
+		// NOTE
+		// we really need to make this repository private if we want to keep our Mixpanel data private
+		// or at least shift settings / config below to a specific json file
+		var API_KEY = 'cb7947b81e377833c6e2b43303c35a67',
+		    API_SECRET = '47133ca36be25e1b72b91dbea947ea20',
+		    MIXPANEL_API_URL = 'http://mixpanel.com/api/2.0/';
+
+		var panel = new MixpanelExport({
+  			api_key: API_KEY,
+  			api_secret: API_SECRET
+		});
+
+		panel.events({
+			event: events,
+			interval: 7,
+			unit: "day",
+			type: "general"
+		}).then(function(data){
+			var score  = {};
+			for(var event in data.data.values){
+				var eventDetail = data.data.values[event];
+				if(score[event] === undefined){
+					score[event] = 0;
+				};
+				for(var interval in eventDetail){
+					score[event] += eventDetail[interval];
+				};
+			};
+			return callback(score);
+		})
+	}
 
 	function loadMenus(){
 		var snakebiteURL = 'http://snakebite.herokuapp.com' + '/restaurants',
