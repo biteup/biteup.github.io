@@ -180,183 +180,210 @@
     <script src="assets/js/jquery.hammer.min.js"></script>
     <script src="node_modules/mixpanel-data-export/dist/mixpanel_data_export.js"></script>
     <script>
-    loadMenus();
+    !function($){
+		var undefined;  // define undefined so the undefined value does not get overridden
 
-    // Banner text add parallax efect and fade
-	function EasyPeasyParallax() {
-	    scrollPos = $(this).scrollTop();
-	    $('#slider').css({
-	        'background-position': '50% ' + (-scrollPos / 4) + "px"
-	    });
-	    $('#bannertext').css({
-	        'margin-top': (scrollPos / 4) + "px",
-	        'opacity': 1 - (scrollPos / 250)
-	    });
-	}
-	$(document).ready(function () {
-		$('#slides').superslides({
-		    slide_easing: 'easeInOutCubic',
-		    slide_speed: 800,
-		    pagination: true,
-		    hashchange: false,
-		    scrollable: true,
-		    animation: 'fade'
-		});
-		
-		// Add swipe option
-		
-		$('#slides').hammer().on('swipeleft', function () {
-		    $(this).superslides('animate', 'next');
-		});
-		
-		$('#slides').hammer().on('swiperight', function () {
-		    $(this).superslides('animate', 'prev');
-		});
+		Array.prototype.shuffle = function(){
+			// Fisher-Yates shuffle
 
-	    $(window).scroll(function () {
-	        EasyPeasyParallax();
-	    });
+			var currentIndex = this.length,
+				randomIndex,
+				tmp;
 
-	    // get mixpanel event info
-	    var mixpanelEvent = $('#bento-view-header').data('mixpanel-event');
-	    fetchMixpanelEvents([mixpanelEvent], function(data){
-	    	$('#bento-view-info').text(data[mixpanelEvent]);
-	    });
-	});
+			while (0 !== currentIndex) {
+				randomIndex = Math.floor(Math.random() * currentIndex);
+				currentIndex -= 1;
 
-	function fetchMixpanelEvents(events, callback){
-		// NOTE
-		// we really need to make this repository private if we want to keep our Mixpanel data private
-		// or at least shift settings / config below to a specific json file
-		var API_KEY = 'cb7947b81e377833c6e2b43303c35a67',
-		    API_SECRET = '47133ca36be25e1b72b91dbea947ea20',
-		    MIXPANEL_API_URL = 'http://mixpanel.com/api/2.0/';
-
-		var panel = new MixpanelExport({
-  			api_key: API_KEY,
-  			api_secret: API_SECRET
-		});
-
-		panel.events({
-			event: events,
-			interval: 7,
-			unit: "day",
-			type: "general"
-		}).then(function(data){
-			var score  = {};
-			for(var event in data.data.values){
-				var eventDetail = data.data.values[event];
-				if(score[event] === undefined){
-					score[event] = 0;
-				};
-				for(var interval in eventDetail){
-					score[event] += eventDetail[interval];
-				};
+				// swap
+				tmp = this[currentIndex];
+				this[currentIndex] = array[randomIndex];
+				this[randomIndex] = tmp;
 			};
-			return callback(score);
-		})
-	}
+			return this;
+		};
 
-	function loadMenus(){
-		var snakebiteURL = 'http://snakebite.herokuapp.com' + '/restaurants',
-		    i = 0, 
-			max = 4,
-			elem,
-			img,
-			restaurant,
-			menu;
+	    loadMenus();
 
-		$.getJSON(snakebiteURL).success(function(data){
-			var restaurants = data.items || [],
-				menuGallery = $('#bentoGallery');
+	    // Banner text add parallax efect and fade
+		function EasyPeasyParallax() {
+		    scrollPos = $(this).scrollTop();
+		    $('#slider').css({
+		        'background-position': '50% ' + (-scrollPos / 4) + "px"
+		    });
+		    $('#bannertext').css({
+		        'margin-top': (scrollPos / 4) + "px",
+		        'opacity': 1 - (scrollPos / 250)
+		    });
+		}
+		$(document).ready(function () {
+			$('#slides').superslides({
+			    slide_easing: 'easeInOutCubic',
+			    slide_speed: 800,
+			    pagination: true,
+			    hashchange: false,
+			    scrollable: true,
+			    animation: 'fade'
+			});
 
-			if(restaurants.length > 0){
-				for(; i < max; i++){
-					restaurant = restaurants[i];
-					menu = restaurants[i].menus[0];
-					img = menu.images[0];
+			// Add swipe option
 
-					// for now, it's trivial but the code below is slightly ridiculous and amateur :( 
-					// we should probably use Ember JS or a similar frontend MVC framework to worj with templates for this 
-					// -- Kelvin
+			$('#slides').hammer().on('swipeleft', function () {
+			    $(this).superslides('animate', 'next');
+			});
+			
+			$('#slides').hammer().on('swiperight', function () {
+				$(this).superslides('animate', 'prev');
+			});
 
-					elem = '<li class="cbp-item graphic identity"><a class="cbp-caption cbp-lightbox" data-title="Image" href="' + img + '"<div class="cbp-caption-defaultWrap"><img src="' + img + '" alt="" class="img-responsive"></div><div class="cbp-caption-activeWrap"><div class="cbp-l-caption-alignCenter"><div class="cbp-l-caption-body"><div class="cbp-l-caption-title">' + menu.name + ' <small>¥ ' + menu.price + '</small></div><div class="cbp-l-caption-desc">by ' + restaurant.name + '</div></div></div></div></a></li>';
+		    $(window).scroll(function () {
+		        EasyPeasyParallax();
+		    });
 
-	 				menuGallery.append(elem);
-				};
-
-				(function ($, window, document, undefined) {
-
-				    var gridContainer = $('#grid-container'),
-				        filtersContainer = $('#filters-container');
-
-				    // init cubeportfolio
-				    gridContainer.cubeportfolio({
-
-				        defaultFilter: '*',
-
-				        animationType: 'rotateRoom',
-
-				        gapHorizontal: 0,
-
-				        gapVertical: 0,
-
-				        gridAdjustment: 'responsive',
-
-				        caption: 'overlayBottomAlong',
-
-				        displayType: 'bottomToTop',
-
-				        displayTypeSpeed: 100,
-
-				        // lightbox
-				        lightboxDelegate: '.cbp-lightbox',
-				        lightboxGallery: true,
-				        lightboxTitleSrc: 'data-title',
-				        lightboxShowCounter: true,
-
-
-
-				    });
-
-				    // add listener for filters click
-				    filtersContainer.on('click', '.cbp-filter-item', function (e) {
-
-				        var me = $(this),
-				            wrap;
-
-				        // get cubeportfolio data and check if is still animating (reposition) the items.
-				        if (!$.data(gridContainer[0], 'cubeportfolio').isAnimating) {
-
-				            if (filtersContainer.hasClass('cbp-l-filters-dropdown')) {
-				                wrap = $('.cbp-l-filters-dropdownWrap');
-
-				                wrap.find('.cbp-filter-item').removeClass('cbp-filter-item-active');
-
-				                wrap.find('.cbp-l-filters-dropdownHeader').text(me.text());
-
-				                me.addClass('cbp-filter-item-active');
-				            } else {
-				                me.addClass('cbp-filter-item-active').siblings().removeClass('cbp-filter-item-active');
-				            }
-
-				        }
-
-				        // filter the items
-				        gridContainer.cubeportfolio('filter', me.data('filter'), function () {});
-
-				    });
-
-				    // activate counter for filters
-				    gridContainer.cubeportfolio('showCounter', filtersContainer.find('.cbp-filter-item'));
-
-				})(jQuery, window, document);
-
-			};
-		}).fail(function(err){ 
-			console.log('ERROR', JSON.stringify(err, null, 4)); 
+		    // get mixpanel event info
+		    var mixpanelEvent = $('#bento-view-header').data('mixpanel-event');
+		    fetchMixpanelEvents([mixpanelEvent], function(data){
+				$('#bento-view-info').text(data[mixpanelEvent]);
+		    });
 		});
-	}
+
+		function fetchMixpanelEvents(events, callback){
+			// NOTE
+			// we really need to make this repository private if we want to keep our Mixpanel data private
+			// or at least shift settings / config below to a specific json file
+			var API_KEY = 'cb7947b81e377833c6e2b43303c35a67',
+			    API_SECRET = '47133ca36be25e1b72b91dbea947ea20',
+			    MIXPANEL_API_URL = 'http://mixpanel.com/api/2.0/';
+
+			var panel = new MixpanelExport({
+				api_key: API_KEY,
+				api_secret: API_SECRET
+			});
+
+			panel.events({
+				event: events,
+				interval: 7,
+				unit: "day",
+				type: "general"
+			}).then(function(data){
+				var score  = {};
+				for(var event in data.data.values){
+					var eventDetail = data.data.values[event];
+					if(score[event] === undefined){
+						score[event] = 0;
+					};
+					for(var interval in eventDetail){
+						score[event] += eventDetail[interval];
+					};
+				};
+				return callback(score);
+			})
+		}
+
+		function loadMenus(){
+			var snakebiteURL = 'http://snakebite.herokuapp.com' + '/restaurants',
+			    i = 0,
+			    max = 4,
+			    elem,
+			    img,
+			    restaurant,
+				menu;
+
+			$.getJSON(snakebiteURL).success(function(data){
+				var restaurants = data.items || [],
+					menuGallery = $('#bentoGallery');
+
+				if(restaurants.length > 0){
+
+					// get random restaurants by shuffling filters-container
+					restaurants = restaurants.shuffle();
+
+					for(; i < max; i++){
+						restaurant = restaurants[i];
+						menu = restaurants[i].menus[0];
+						img = menu.images[0];
+
+						// for now, it's trivial but the code below is slightly ridiculous and amateur. apologies :( 
+						// we should probably use Ember JS or a similar frontend MVC framework to work with templates for this 
+						// -- Kelvin
+
+						elem = '<li class="cbp-item graphic identity"><a class="cbp-caption cbp-lightbox" data-title="Image" href="' + img + '"<div class="cbp-caption-defaultWrap"><img src="' + img + '" alt="" class="img-responsive"></div><div class="cbp-caption-activeWrap"><div class="cbp-l-caption-alignCenter"><div class="cbp-l-caption-body"><div class="cbp-l-caption-title">' + menu.name + ' <small>¥ ' + menu.price + '</small></div><div class="cbp-l-caption-desc">by ' + restaurant.name + '</div></div></div></div></a></li>';
+
+						menuGallery.append(elem);
+					};
+
+					(function ($, window, document, undefined) {
+
+					    var gridContainer = $('#grid-container'),
+					        filtersContainer = $('#filters-container');
+
+					    // init cubeportfolio
+					    gridContainer.cubeportfolio({
+
+					        defaultFilter: '*',
+
+					        animationType: 'rotateRoom',
+
+					        gapHorizontal: 0,
+
+					        gapVertical: 0,
+
+					        gridAdjustment: 'responsive',
+
+					        caption: 'overlayBottomAlong',
+
+					        displayType: 'bottomToTop',
+
+					        displayTypeSpeed: 100,
+
+					        // lightbox
+					        lightboxDelegate: '.cbp-lightbox',
+					        lightboxGallery: true,
+					        lightboxTitleSrc: 'data-title',
+					        lightboxShowCounter: true,
+
+
+
+					    });
+
+					    // add listener for filters click
+					    filtersContainer.on('click', '.cbp-filter-item', function (e) {
+
+					        var me = $(this),
+					            wrap;
+
+					        // get cubeportfolio data and check if is still animating (reposition) the items.
+					        if (!$.data(gridContainer[0], 'cubeportfolio').isAnimating) {
+
+					            if (filtersContainer.hasClass('cbp-l-filters-dropdown')) {
+					                wrap = $('.cbp-l-filters-dropdownWrap');
+
+					                wrap.find('.cbp-filter-item').removeClass('cbp-filter-item-active');
+
+					                wrap.find('.cbp-l-filters-dropdownHeader').text(me.text());
+
+					                me.addClass('cbp-filter-item-active');
+					            } else {
+					                me.addClass('cbp-filter-item-active').siblings().removeClass('cbp-filter-item-active');
+					            }
+
+					        }
+
+					        // filter the items
+					        gridContainer.cubeportfolio('filter', me.data('filter'), function () {});
+
+					    });
+
+					    // activate counter for filters
+					    gridContainer.cubeportfolio('showCounter', filtersContainer.find('.cbp-filter-item'));
+
+					})(jQuery, window, document);
+
+				};
+			}).fail(function(err){
+				console.log('ERROR', JSON.stringify(err, null, 4));
+			});
+		}
+	}(jQuery);
     </script>
     
   </body>
