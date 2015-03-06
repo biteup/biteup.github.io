@@ -182,7 +182,6 @@
     <script>
     !function($){
 		var undefined;  // define undefined so the undefined value does not get overridden
-		var isBentoViewDataSet; 
 		var currentViewed;
 		var isBentoViewAnimated;
 
@@ -261,8 +260,6 @@
 		}
 
 		$(document).ready(function () {
-			isBentoViewAnimated = false;
-			isBentoViewDataSet	= false;
 
 			$('#slides').superslides({
 			    slide_easing: 'easeInOutCubic',
@@ -289,7 +286,7 @@
 		        EasyPeasyParallax();
 		        if ($('#bento-view-info').isOnScreen() && !isBentoViewAnimated) {
 		        	isBentoViewAnimated = true;
-		        	if (isBentoViewDataSet) {
+		        	if (currentViewed) {
 				 		$('#bento-view-info').countUpAnimate(0, currentViewed);
 		        	}
 		        }
@@ -298,11 +295,8 @@
 		    // get mixpanel event info
 		    var mixpanelEvent = $('#bento-view-header').data('mixpanel-event');
 		    fetchMixpanelEvents([mixpanelEvent], function(data){
-		    	isBentoViewDataSet 	= true;
 				currentViewed  		= data[mixpanelEvent];
 				$('#bento-view-info').text(data[mixpanelEvent]);
-				isViewDataSet = true;
-				currentView   = data[mixpanelEvent];
 		    });
 		    
 		});
