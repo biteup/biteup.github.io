@@ -231,9 +231,9 @@
 		    return ((bounds.top <= viewport.bottom) && (bounds.bottom >= viewport.top));
 		};
 		
-		Math.easeInQuad = function (t, b, c, d) {
+		Math.easeOutQuad = function (t, b, c, d) {
 			t /= d;
-			return c*t*t + b;
+			return -c * t*(t-2) + b;
 		};
 
 		$.fn.countUpAnimate = function(start, target) {
@@ -252,7 +252,7 @@
 			            return;
 			        }
 			        elapsedTime += 1;
-			        count = Math.round(Math.easeInQuad(elapsedTime, start, target - start, target));
+			        count = Math.round(Math.easeOutQuad(elapsedTime, start, target - start, target));
 			   		count = count  > target ? target : count; 
 			        elements.text(count);
 			        clr = setTimeout(inloop, 32);
