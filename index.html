@@ -340,21 +340,19 @@
 			    max = 4,
 			    elem,
 			    img,
-			    restaurant,
 				menu;
 
 			$.getJSON(snakebiteURL).success(function(data){
-				var restaurants = data.items || [],
+				var menus = data.items || [],
 					menuGallery = $('#bentoGallery');
 
-				if(restaurants.length > 0){
+				if(menus.length > 0){
 
-					// get random restaurants by shuffling filters-container
-					restaurants = restaurants.shuffle();
+					// get random menus by shuffling filters-container
+					menus = menus.shuffle();
 
 					for(; i < max; i++){
-						restaurant = restaurants[i];
-						menu = restaurants[i].menus[0];
+						menu = menus[i];
 						img = menu.images[0];
 
 						// for now, it's trivial but the code below is slightly ridiculous and amateur. apologies :( 
